@@ -12,8 +12,6 @@ def GetInput():
         totalInputList.append(inputList)
     return totalInputList
 
-
-
 class Node():
     def __init__(self, x, y):
         self.x = x
@@ -44,18 +42,18 @@ class BST():
     def Delete(self, x, y):
         if self.node != None:
             if self.node.x == x:
-                if self.node.right.node == None and self.node.left.node == None:
+                if self.node.right.node == None and self.node.left.node == None: # 삭제하고자 하는 node가 leaf node일때
                     self.node = None
                 
-                elif self.node.right.node == None:
-                    if self.node.parent != None:
+                elif self.node.right.node == None: # 삭제하고자 하는 node가 left subtree만 가지고 있을 때
+                    if self.node.parent != None: # 삭제하고자 하는 node의 부모가 있을 때
                         temp = self.node.left
                         self.node.left.node.parent = self.node.parent
                         self.node.parent.node.left = temp
-                    else:
+                    else: # 삭제하고자 하는 node의 부모가 없을 때
                         self.node.left.node.parent = None
                 
-                elif self.node.left.node == None:
+                elif self.node.left.node == None: # 삭제하고자 하는 node가 right subtree만 가지고 있을 때
                     if self.node.parent != None:
                         temp = self.node.right
                         self.node.right.node.parent = self.node.parent
@@ -63,7 +61,7 @@ class BST():
                     else:
                         self.node.right.node.parent = None
 
-                else:
+                else: # 삭제하고자 하는 node가 left, right subtree를 모두 가지고 있을 때
                     replacement = self.NodeSuccessor(self.node)
                     if replacement != None:
                         self.node.x = replacement.x
@@ -106,6 +104,9 @@ class BST():
         return None
 
     def IsDominated(self, node):
+        '''
+        새로운 node를 추가할 수 없는지 여부 판단
+        '''
         nextLargeNode = self.GetNextNode(node)
         if nextLargeNode == None: # 오른쪽에 아무 것도 없다면 지배당하지 않음
             return False
@@ -115,6 +116,9 @@ class BST():
             return True
 
     def RemoveDominated(self, standardNode):
+        '''
+        standardNode 가 추가 되었을 때 Dominated 되는 모든 Node를 삭제
+        '''
         while True:
             nextSmallNode = self.GetPreviousNode(standardNode)
             if nextSmallNode == None:
@@ -127,7 +131,10 @@ class BST():
                 standardNode = temp
                 self.numOfNodes -= 1
 
-    def FindBST(self, x): # Node가 아닌 self BST를 return
+    def FindBST(self, x): 
+        '''
+        Node가 아닌 self BST를 return
+        '''
         if self.node == None:
             return None
         elif self.node.x == x:
