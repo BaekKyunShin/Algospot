@@ -9,18 +9,29 @@ def get_input():
     rawInput = sys.stdin.readline()
     return list(map(int, list(rawInput.strip()))) # '1011' -> [1, 0, 1, 1]
 
+def get_one_index(inputList):
+    ''' inputList에서 왼쪽부터 시작해 처음 1이 나오는 element의 index return'''
+    firstOneIndex = 0
+    for index in range(len(inputList)):
+        if inputList[index] == 1:
+            firstOneIndex = index
+            break
+    return firstOneIndex
+
 def binary_count(inputList):
+    firstOneIndex = get_one_index(inputList)
+    if firstOneIndex == 0 and inputList[0] == 0: return 0 # input이 0인 경우
     count = 0
     while len(inputList) > 0:
-        if not 1 in inputList: # 1이 없으면(즉, 0이면) while문 중단
-            break
         lastNum = inputList[-1]
         if lastNum == 0:
             inputList.pop(-1)
         else:
             inputList[-1] = 0
         count += 1
-    return count # 마지막 0까지 처리하므로 1만큼 뺌
+        if firstOneIndex == len(inputList)-1 and inputList[-1] == 0: # firstOneIndex에 해당하는 element가 0일때 while문 break
+            break
+    return count
 
 if __name__ == "__main__":   
     inputList = get_input()
